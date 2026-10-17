@@ -77,6 +77,19 @@ from your issuer, has no expiration, or does not encode `kycPassed = true`.
 The schema UID includes the resolver address, so this cannot be bypassed.
 Details in [docs/CHAIN_NOTES.md](docs/CHAIN_NOTES.md#eas).
 
+### Web app
+
+`web/` is a small browser app for the same KYC gate: connect a wallet, see
+whether this address can pay and why, then pay. The issuer also gets grant
+and revoke. Every action is simulated first; a blocked one never reaches the
+wallet, and fees above 10 tOKRW are refused.
+
+```bash
+npm run web:config   # write web/src/generated.json from your deployment (after kyc:setup)
+npm run web:dev      # http://localhost:5173
+npm run web:build    # static site in dist-web/, published to GitHub Pages by .github/workflows/pages.yml
+```
+
 ### Measured costs (Maroo testnet, October 2026)
 
 | Action | Fee |
@@ -104,6 +117,7 @@ test/                           TypeScript tests: proxy flow, KYC resolver on re
 lib/                            network constants, fee budget, guarded send, PCL errors, script runner
 scripts/                        check-network, deploy, pay, set-denylist, kyc-*
 docs/CHAIN_NOTES.md             verified chain facts and why the config looks like this
+web/                            browser app for the KYC gate (vanilla TypeScript + Vite)
 ```
 
 ## What can be tested where

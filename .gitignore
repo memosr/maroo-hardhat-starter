@@ -32,3 +32,6 @@
 
 # Your own testnet deployment records
 /deployments
+
+# Web app build output
+/dist-web

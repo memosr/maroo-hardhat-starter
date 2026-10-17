@@ -1,11 +1,20 @@
 {
   "compilerOptions": {
-    "lib": ["es2023"],
+    "lib": [
+      "es2023"
+    ],
     "module": "node20",
     "target": "es2023",
     "skipLibCheck": true,
     "outDir": "dist",
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "verbatimModuleSyntax": true
-  }
+  },
+  "exclude": [
+    "web",
+    "dist-web",
+    "node_modules"
+  ]
 }

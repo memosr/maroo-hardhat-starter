@@ -1,0 +1,175 @@
+:root {
+  --celadon: #dde8e1;
+  --celadon-deep: #cbdad1;
+  --paper: #f3f7f4;
+  --ink: #1e2b29;
+  --ink-soft: #4d5d59;
+  --pine: #2f6b57;
+  --oxblood: #9b2c24;
+  --wood: #8a6a4a;
+  --focus: #1f5fa8;
+  --sans: "IBM Plex Sans", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --celadon: #17211f;
+    --celadon-deep: #22302c;
+    --paper: #1c2826;
+    --ink: #e3ece7;
+    --ink-soft: #a6b5b0;
+    --pine: #6fbf9f;
+    --oxblood: #e2796f;
+    --wood: #c19d78;
+    --focus: #8ab8f0;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+body {
+  margin: 0;
+  background: var(--celadon);
+  color: var(--ink);
+  font: 400 1rem/1.55 var(--sans);
+}
+
+main {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+}
+
+h1 { font-size: 1.25rem; font-weight: 600; margin: 0; }
+h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.75rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 2px solid var(--wood);
+  display: inline-block;
+}
+
+a { color: inherit; text-underline-offset: 0.2em; }
+.mono { font-family: var(--mono); font-size: 0.9em; word-break: break-all; }
+
+.top { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; flex-wrap: wrap; }
+.top-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+/* Language switch: two letters, the active one filled. */
+.lang { display: inline-flex; border: 2px solid var(--ink); }
+.lang .lang-btn {
+  background: transparent;
+  color: var(--ink);
+  border: 0;
+  padding: 0.55rem 0.6rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+.lang .lang-btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.net { margin: 0.15rem 0 0; color: var(--ink-soft); font-size: 0.875rem; display: flex; align-items: center; gap: 0.4rem; }
+.dot { width: 0.5rem; height: 0.5rem; border-radius: 50%; background: var(--pine); }
+
+.lede { color: var(--ink-soft); margin: 1.5rem 0 2rem; max-width: 34rem; }
+
+/* The verdict plate: the one loud thing on the page. */
+.verdict {
+  background: var(--paper);
+  border-left: 0.6rem solid var(--ink-soft);
+  padding: 1.5rem 1.5rem 1.6rem;
+  margin-bottom: 2.5rem;
+  transition: border-color 0.25s ease;
+}
+.verdict[data-state="allowed"] { border-color: var(--pine); }
+.verdict[data-state="blocked"] { border-color: var(--oxblood); }
+.verdict[data-state="busy"] { border-color: var(--wood); animation: pulse 1.2s ease-in-out infinite; }
+@keyframes pulse { 50% { border-left-color: var(--celadon-deep); } }
+.verdict-title { font-size: clamp(1.6rem, 5vw, 2.25rem); font-weight: 600; line-height: 1.15; margin: 0 0 0.5rem; }
+.verdict[data-state="allowed"] .verdict-title { color: var(--pine); }
+.verdict[data-state="blocked"] .verdict-title { color: var(--oxblood); }
+.verdict-detail { margin: 0; color: var(--ink-soft); max-width: 32rem; }
+.verdict-detail a { color: var(--ink); }
+
+/* The two gates a payment passes, in order: Maroo's chain rule (PCL), then the contract. */
+.trail { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--celadon-deep); }
+.gates { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 0.5rem 0; }
+.gate { display: flex; align-items: baseline; gap: 0.45rem; font-size: 0.9rem; }
+.gate + .gate::before { content: ""; width: 1.75rem; height: 2px; background: var(--celadon-deep); align-self: center; margin: 0 0.3rem 0 0.75rem; }
+.gate-name { font-weight: 500; }
+.gate-state { color: var(--ink-soft); }
+.gate-dot { width: 0.7rem; height: 0.7rem; border-radius: 50%; border: 2px solid var(--ink-soft); align-self: center; flex: none; }
+.gate[data-state="pass"] .gate-dot { background: var(--pine); border-color: var(--pine); }
+.gate[data-state="pass"] .gate-state { color: var(--pine); }
+.gate[data-state="fail"] .gate-dot { background: var(--oxblood); border-color: var(--oxblood); }
+.gate[data-state="fail"] .gate-state { color: var(--oxblood); font-weight: 500; }
+.gate[data-state="skip"] { opacity: 0.6; }
+.trail-note { margin: 0.6rem 0 0; font-size: 0.8rem; color: var(--ink-soft); }
+
+.block { margin-bottom: 2.5rem; }
+
+.facts { display: grid; grid-template-columns: 6rem 1fr; gap: 0.35rem 1rem; margin: 0; }
+.facts dt { color: var(--ink-soft); }
+.facts dd { margin: 0; min-width: 0; }
+.facts.small { font-size: 0.875rem; }
+
+form { display: grid; gap: 0.9rem; max-width: 28rem; }
+label { display: grid; gap: 0.3rem; font-size: 0.9rem; color: var(--ink-soft); }
+input {
+  font: inherit;
+  color: var(--ink);
+  background: var(--paper);
+  border: 1px solid var(--celadon-deep);
+  border-bottom: 2px solid var(--ink-soft);
+  padding: 0.55rem 0.65rem;
+  width: 100%;
+}
+.block > .hint { margin-bottom: 1rem; }
+.hint { margin: 0; font-size: 0.875rem; color: var(--ink-soft); }
+form.inline { grid-template-columns: 1fr auto; align-items: end; max-width: none; }
+.row { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+
+button {
+  font: 500 0.95rem/1 var(--sans);
+  color: var(--paper);
+  background: var(--ink);
+  border: 2px solid var(--ink);
+  padding: 0.7rem 1.1rem;
+  cursor: pointer;
+  justify-self: start;
+}
+button.quiet { background: transparent; color: var(--ink); }
+button:disabled { opacity: 0.5; cursor: wait; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; }
+
+.confirm {
+  margin-top: 1.25rem;
+  padding: 1rem 1.1rem;
+  border: 2px solid var(--pine);
+  max-width: 28rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+.confirm p { margin: 0; flex-basis: 100%; }
+
+.log { list-style: none; padding: 0; margin: 0 0 2.5rem; font-size: 0.875rem; color: var(--ink-soft); }
+.log li { padding: 0.3rem 0; border-top: 1px solid var(--celadon-deep); }
+.log li:empty { display: none; }
+
+footer { font-size: 0.875rem; color: var(--ink-soft); border-top: 2px solid var(--wood); padding-top: 1rem; }
+footer p { margin: 1rem 0 0; }
+
+@media (max-width: 30rem) {
+  form.inline { grid-template-columns: 1fr; }
+  .gates { flex-direction: column; }
+  .gate + .gate::before { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .verdict { transition: none; animation: none; }
+}

@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Maroo KYC Gate</title>
+    <meta name="description" content="Pay through a Maroo contract that only KYC-verified addresses can use. The chain enforces the rule." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="./src/styles.css" />
+  </head>
+  <body>
+    <main>
+      <header class="top">
+        <div>
+          <h1 data-i18n="title">Maroo KYC gate</h1>
+          <p class="net"><span class="dot" aria-hidden="true"></span><span data-i18n="net">Maroo testnet</span></p>
+        </div>
+        <div class="top-actions">
+          <div class="lang" role="group" data-i18n-aria="langLabel" aria-label="Language">
+            <button type="button" class="lang-btn" data-lang="en" lang="en">EN</button>
+            <button type="button" class="lang-btn" data-lang="tr" lang="tr">TR</button>
+          </div>
+          <button id="connect" type="button" data-i18n="connect">Connect wallet</button>
+        </div>
+      </header>
+
+      <p class="lede" data-i18n="lede"></p>
+
+      <section id="verdict" class="verdict" data-state="idle" aria-live="polite">
+        <p class="verdict-title" id="verdict-title"></p>
+        <p class="verdict-detail" id="verdict-detail"></p>
+        <div class="trail" id="trail" hidden>
+          <ol class="gates">
+            <li class="gate" id="gate-chain"><span class="gate-dot" aria-hidden="true"></span><span class="gate-name" data-i18n="gateChain"></span><span class="gate-state"></span></li>
+            <li class="gate" id="gate-contract"><span class="gate-dot" aria-hidden="true"></span><span class="gate-name" data-i18n="gateContract"></span><span class="gate-state"></span></li>
+          </ol>
+          <p class="trail-note" data-i18n="trailNote"></p>
+        </div>
+      </section>
+
+      <section class="block" id="you" hidden>
+        <h2 data-i18n="youH"></h2>
+        <dl class="facts">
+          <dt data-i18n="address"></dt><dd><a id="you-address" class="mono" target="_blank" rel="noopener"></a></dd>
+          <dt data-i18n="balance"></dt><dd id="you-balance">…</dd>
+          <dt data-i18n="kyc"></dt><dd id="you-kyc">…</dd>
+        </dl>
+      </section>
+
+      <section class="block" id="pay" hidden>
+        <h2 data-i18n="payH"></h2>
+        <form id="pay-form" novalidate>
+          <label><span data-i18n="recipient"></span><input id="pay-to" class="mono" autocomplete="off" spellcheck="false" /></label>
+          <label><span data-i18n="amount"></span><input id="pay-amount" inputmode="decimal" value="0.001" /></label>
+          <p class="hint" id="pay-limit"></p>
+          <button type="submit" data-i18n="checkPay"></button>
+        </form>
+        <div class="confirm" id="pay-confirm" hidden>
+          <p id="pay-fee"></p>
+          <button type="button" id="pay-send"></button>
+          <button type="button" class="quiet" id="pay-cancel" data-i18n="cancel"></button>
+        </div>
+      </section>
+
+      <section class="block" id="issuer" hidden>
+        <h2 data-i18n="issuerH"></h2>
+        <p class="hint" data-i18n="issuerHint"></p>
+        <form id="grant-form" novalidate>
+          <label><span data-i18n="grantTo"></span><input id="grant-to" class="mono" autocomplete="off" spellcheck="false" /></label>
+          <label><span data-i18n="days"></span><input id="grant-days" inputmode="numeric" value="30" /></label>
+          <div class="row">
+            <button type="submit" data-i18n="checkGrant"></button>
+            <button type="button" class="quiet" id="revoke-check" data-i18n="checkRevoke"></button>
+          </div>
+        </form>
+        <div class="confirm" id="issuer-confirm" hidden>
+          <p id="issuer-fee"></p>
+          <button type="button" id="issuer-send"></button>
+          <button type="button" class="quiet" id="issuer-cancel" data-i18n="cancel"></button>
+        </div>
+      </section>
+
+      <section class="block" id="lookup">
+        <h2 data-i18n="lookupH"></h2>
+        <p class="hint" data-i18n="lookupHint"></p>
+        <form id="lookup-form" class="inline" novalidate>
+          <label><span data-i18n="address"></span><input id="lookup-address" class="mono" autocomplete="off" spellcheck="false" placeholder="0x…" /></label>
+          <button type="submit" data-i18n="lookupBtn"></button>
+        </form>
+      </section>
+
+      <ol class="log" id="log" data-i18n-aria="activity" aria-label="Activity"></ol>
+
+      <footer>
+        <dl class="facts small">
+          <dt data-i18n="contract"></dt><dd><a id="addr-router" class="mono" target="_blank" rel="noopener"></a></dd>
+          <dt data-i18n="issuer"></dt><dd><a id="addr-issuer" class="mono" target="_blank" rel="noopener"></a></dd>
+        </dl>
+        <p>
+          <span data-i18n="footTest"></span>
+          <a href="https://faucet.maroo.io" target="_blank" rel="noopener" data-i18n="faucet"></a>.
+          <span data-i18n="source"></span>
+          <a href="https://github.com/memosr/maroo-hardhat-starter" target="_blank" rel="noopener">maroo-hardhat-starter</a>.
+        </p>
+      </footer>
+    </main>
+    <script type="module" src="./src/main.ts"></script>
+  </body>
+</html>

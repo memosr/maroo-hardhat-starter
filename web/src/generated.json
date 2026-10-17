@@ -1,0 +1,625 @@
+{
+  "chainId": 450815,
+  "proxy": "0x7Ab8bEb1e61Ac2fA46004a417C5196b234e5A930",
+  "implementation": "0xb868a44f8550b52c6394b467e1198ca7d1785b65",
+  "kyc": {
+    "resolver": "0xe87537ed818cfad8dd41a7c9337f730e6b3f5263",
+    "schemaUid": "0xa3c82fa52774f5f419e772207c921bbfc48634dfd922dfd6297431f562c72ffc",
+    "issuer": "0xae523a5cd924d183f147cf25c6c747c8e72e644e",
+    "eas": "0x1000000000000000000000000000000000000007",
+    "indexer": "0x1000000000000000000000000000000000000008",
+    "schemaRegistry": "0x1000000000000000000000000000000000000006"
+  },
+  "abi": {
+    "router": [
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxPayment",
+            "type": "uint256"
+          }
+        ],
+        "name": "AmountAboveMax",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidInitialization",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "NotInitializing",
+        "type": "error"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          }
+        ],
+        "name": "OwnableInvalidOwner",
+        "type": "error"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "account",
+            "type": "address"
+          }
+        ],
+        "name": "OwnableUnauthorizedAccount",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "ReentrancyGuardReentrantCall",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "TransferFailed",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "ZeroAmount",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "ZeroMaxPayment",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "ZeroRecipient",
+        "type": "error"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "payer",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "uint256",
+            "name": "amount",
+            "type": "uint256"
+          }
+        ],
+        "name": "Paid",
+        "type": "event"
+      },
+      {
+        "inputs": [],
+        "name": "maxPayment",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address payable",
+            "name": "recipient",
+            "type": "address"
+          }
+        ],
+        "name": "pay",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+      },
+      {
+        "inputs": [],
+        "name": "paymentCount",
+        "outputs": [
+          {
+            "internalType": "uint256",
+            "name": "",
+            "type": "uint256"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],
+    "eas": [
+      {
+        "inputs": [],
+        "name": "AccessDenied",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "AlreadyRevoked",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "AlreadyRevokedOffchain",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "AlreadyTimestamped",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "DeadlineExpired",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "FailedCall",
+        "type": "error"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "uint256",
+            "name": "balance",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "needed",
+            "type": "uint256"
+          }
+        ],
+        "name": "InsufficientBalance",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InsufficientValue",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidAttestation",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidAttestations",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidExpirationTime",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidLength",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidNonce",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidOffset",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidRegistry",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidRevocation",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidRevocations",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidSchema",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidShortString",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidSignature",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidVerifier",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "Irrevocable",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "NotFound",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "NotPayable",
+        "type": "error"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "string",
+            "name": "str",
+            "type": "string"
+          }
+        ],
+        "name": "StringTooLong",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "WrongSchema",
+        "type": "error"
+      },
+      {
+        "anonymous": false,
+        "inputs": [
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          },
+          {
+            "indexed": true,
+            "internalType": "address",
+            "name": "attester",
+            "type": "address"
+          },
+          {
+            "indexed": false,
+            "internalType": "bytes32",
+            "name": "uid",
+            "type": "bytes32"
+          },
+          {
+            "indexed": true,
+            "internalType": "bytes32",
+            "name": "schemaUID",
+            "type": "bytes32"
+          }
+        ],
+        "name": "Attested",
+        "type": "event"
+      },
+      {
+        "inputs": [
+          {
+            "components": [
+              {
+                "internalType": "bytes32",
+                "name": "schema",
+                "type": "bytes32"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "address",
+                    "name": "recipient",
+                    "type": "address"
+                  },
+                  {
+                    "internalType": "uint64",
+                    "name": "expirationTime",
+                    "type": "uint64"
+                  },
+                  {
+                    "internalType": "bool",
+                    "name": "revocable",
+                    "type": "bool"
+                  },
+                  {
+                    "internalType": "bytes32",
+                    "name": "refUID",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "bytes",
+                    "name": "data",
+                    "type": "bytes"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "value",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct AttestationRequestData",
+                "name": "data",
+                "type": "tuple"
+              }
+            ],
+            "internalType": "struct AttestationRequest",
+            "name": "request",
+            "type": "tuple"
+          }
+        ],
+        "name": "attest",
+        "outputs": [
+          {
+            "internalType": "bytes32",
+            "name": "",
+            "type": "bytes32"
+          }
+        ],
+        "stateMutability": "payable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes32",
+            "name": "uid",
+            "type": "bytes32"
+          }
+        ],
+        "name": "getAttestation",
+        "outputs": [
+          {
+            "components": [
+              {
+                "internalType": "bytes32",
+                "name": "uid",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "schema",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "uint64",
+                "name": "time",
+                "type": "uint64"
+              },
+              {
+                "internalType": "uint64",
+                "name": "expirationTime",
+                "type": "uint64"
+              },
+              {
+                "internalType": "uint64",
+                "name": "revocationTime",
+                "type": "uint64"
+              },
+              {
+                "internalType": "bytes32",
+                "name": "refUID",
+                "type": "bytes32"
+              },
+              {
+                "internalType": "address",
+                "name": "recipient",
+                "type": "address"
+              },
+              {
+                "internalType": "address",
+                "name": "attester",
+                "type": "address"
+              },
+              {
+                "internalType": "bool",
+                "name": "revocable",
+                "type": "bool"
+              },
+              {
+                "internalType": "bytes",
+                "name": "data",
+                "type": "bytes"
+              }
+            ],
+            "internalType": "struct Attestation",
+            "name": "",
+            "type": "tuple"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "components": [
+              {
+                "internalType": "bytes32",
+                "name": "schema",
+                "type": "bytes32"
+              },
+              {
+                "components": [
+                  {
+                    "internalType": "bytes32",
+                    "name": "uid",
+                    "type": "bytes32"
+                  },
+                  {
+                    "internalType": "uint256",
+                    "name": "value",
+                    "type": "uint256"
+                  }
+                ],
+                "internalType": "struct RevocationRequestData",
+                "name": "data",
+                "type": "tuple"
+              }
+            ],
+            "internalType": "struct RevocationRequest",
+            "name": "request",
+            "type": "tuple"
+          }
+        ],
+        "name": "revoke",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+      }
+    ],
+    "indexer": [
+      {
+        "inputs": [],
+        "name": "InvalidAttestation",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidEAS",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidOffset",
+        "type": "error"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "address",
+            "name": "recipient",
+            "type": "address"
+          },
+          {
+            "internalType": "bytes32",
+            "name": "schemaUID",
+            "type": "bytes32"
+          },
+          {
+            "internalType": "uint256",
+            "name": "start",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "length",
+            "type": "uint256"
+          },
+          {
+            "internalType": "bool",
+            "name": "reverseOrder",
+            "type": "bool"
+          }
+        ],
+        "name": "getReceivedAttestationUIDs",
+        "outputs": [
+          {
+            "internalType": "bytes32[]",
+            "name": "",
+            "type": "bytes32[]"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes32",
+            "name": "attestationUID",
+            "type": "bytes32"
+          }
+        ],
+        "name": "indexAttestation",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+      },
+      {
+        "inputs": [
+          {
+            "internalType": "bytes32",
+            "name": "attestationUID",
+            "type": "bytes32"
+          }
+        ],
+        "name": "isAttestationIndexed",
+        "outputs": [
+          {
+            "internalType": "bool",
+            "name": "",
+            "type": "bool"
+          }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+      }
+    ],
+    "resolver": [
+      {
+        "inputs": [],
+        "name": "AccessDenied",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InsufficientValue",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidEAS",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "InvalidLength",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "NotPayable",
+        "type": "error"
+      },
+      {
+        "inputs": [],
+        "name": "ZeroIssuer",
+        "type": "error"
+      }
+    ]
+  }
+}

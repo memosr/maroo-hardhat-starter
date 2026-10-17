@@ -6,12 +6,12 @@
   "type": "module",
   "license": "MIT",
   "engines": {
-    "node": ">=22.10"
+    "node": ">=22.12"
   },
   "scripts": {
     "build": "hardhat build",
     "test": "hardhat test",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p web",
     "check:network": "hardhat run scripts/check-network.ts --network marooTestnet",
     "deploy": "hardhat run scripts/deploy.ts --network marooTestnet",
     "policy:denylist": "hardhat run scripts/set-denylist.ts --network marooTestnet",
@@ -20,7 +20,11 @@
     "kyc:grant": "hardhat run scripts/kyc-grant.ts --network marooTestnet",
     "kyc:revoke": "hardhat run scripts/kyc-revoke.ts --network marooTestnet",
     "kyc:check": "hardhat run scripts/kyc-check.ts --network marooTestnet",
-    "verify": "hardhat --build-profile default run scripts/verify.ts --network marooTestnet"
+    "verify": "hardhat --build-profile default run scripts/verify.ts --network marooTestnet",
+    "web:config": "hardhat run scripts/export-web-config.ts",
+    "web:dev": "vite",
+    "web:build": "vite build",
+    "web:preview": "vite preview"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ignition": "^3.1.9",
@@ -29,7 +33,8 @@
     "forge-std": "github:foundry-rs/forge-std#v1.16.2",
     "hardhat": "^3.20.0",
     "typescript": "~6.0.3",
-    "viem": "^2.57.4"
+    "viem": "^2.57.4",
+    "vite": "^8.3.4"
   },
   "dependencies": {
     "@maroo-chain/contracts": "^0.0.9",
