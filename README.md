@@ -1,5 +1,7 @@
 # maroo-hardhat-starter
 
+[![CI](https://github.com/memosr/maroo-hardhat-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/memosr/maroo-hardhat-starter/actions/workflows/ci.yml)
+
 A Hardhat 3 + viem starter for building on [Maroo](https://www.maroo.io), the
 KRW-native Layer 1. It deploys a contract behind a **PCL proxy** so the chain
 can enforce compliance policies (denylist, volume limits, EAS attestations)
@@ -42,7 +44,11 @@ npm test            # compile + Solidity and TypeScript tests (local, free)
    ```bash
    npm run pay                      # 0.001 tOKRW to yourself; MAROO_PAY_TO / MAROO_PAY_AMOUNT to change
    ```
-6. See PCL enforce a policy. Deny your own address, pay again, then clear:
+6. Verify the source code on Maroo's Blockscout (free, nothing is sent on chain):
+   ```bash
+   npm run verify                   # PaymentRouter implementation, and KycResolver if set up
+   ```
+7. See PCL enforce a policy. Deny your own address, pay again, then clear:
    ```bash
    MAROO_DENY=<your address> npm run policy:denylist
    npm run pay                      # ✖ InDenylist(...) [PCL violation: denylist], nothing sent

@@ -1,6 +1,6 @@
 {
   "name": "maroo-hardhat-starter",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Hardhat 3 + viem starter for Maroo: PCL proxy deployment, compliance policies and safe testnet scripts",
   "private": true,
   "type": "module",
@@ -19,14 +19,15 @@
     "kyc:setup": "hardhat run scripts/kyc-setup.ts --network marooTestnet",
     "kyc:grant": "hardhat run scripts/kyc-grant.ts --network marooTestnet",
     "kyc:revoke": "hardhat run scripts/kyc-revoke.ts --network marooTestnet",
-    "kyc:check": "hardhat run scripts/kyc-check.ts --network marooTestnet"
+    "kyc:check": "hardhat run scripts/kyc-check.ts --network marooTestnet",
+    "verify": "hardhat --build-profile default run scripts/verify.ts --network marooTestnet"
   },
   "devDependencies": {
-    "@nomicfoundation/hardhat-ignition": "^3.1.8",
+    "@nomicfoundation/hardhat-ignition": "^3.1.9",
     "@nomicfoundation/hardhat-toolbox-viem": "^5.0.7",
     "@types/node": "^22.20.5",
     "forge-std": "github:foundry-rs/forge-std#v1.16.2",
-    "hardhat": "^3.18.1",
+    "hardhat": "^3.20.0",
     "typescript": "~6.0.3",
     "viem": "^2.57.4"
   },

@@ -116,3 +116,15 @@ self-issued attestation to show the rejection on chain at no cost.
 
 Attestations must also be **indexed** (`Indexer.indexAttestation(uid)`)
 before PCL sees them; `npm run kyc:grant` does both steps.
+
+## Source verification
+
+`npm run verify` verifies the `PaymentRouter` implementation and `KycResolver`
+on Maroo's Blockscout (`https://explorer-testnet.maroo.io/blockscout/api`,
+Etherscan-compatible API). Verified on testnet in October 2026.
+
+Build profiles must match: `hardhat run` deploys with the `default` profile
+(optimizer off), but `hardhat verify` uses `production` (optimizer on) when no
+profile is given, and the bytecode would never match. The npm script passes
+`--build-profile default`, and `scripts/verify.ts` refuses to run otherwise.
+The PCL proxy is created by the PCL precompile and has no source to verify.
