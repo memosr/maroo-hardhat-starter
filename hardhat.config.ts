@@ -18,17 +18,21 @@ export default defineConfig({
     npmFilesToBuild: [
       "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol",
     ],
+    // Two compilers: 0.8.34 for this project, 0.8.29 for the unmodified EAS
+    // 1.4.0 sources in contracts/vendor/eas (they pin `pragma solidity 0.8.29`).
+    // Hardhat picks the newest compiler each file's pragma allows.
     profiles: {
       default: {
-        version: "0.8.34",
-        settings: { evmVersion: EVM_VERSION },
+        compilers: [
+          { version: "0.8.34", settings: { evmVersion: EVM_VERSION } },
+          { version: "0.8.29", settings: { evmVersion: EVM_VERSION } },
+        ],
       },
       production: {
-        version: "0.8.34",
-        settings: {
-          evmVersion: EVM_VERSION,
-          optimizer: { enabled: true, runs: 200 },
-        },
+        compilers: [
+          { version: "0.8.34", settings: { evmVersion: EVM_VERSION, optimizer: { enabled: true, runs: 200 } } },
+          { version: "0.8.29", settings: { evmVersion: EVM_VERSION, optimizer: { enabled: true, runs: 200 } } },
+        ],
       },
     },
   },

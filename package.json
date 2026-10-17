@@ -15,7 +15,11 @@
     "check:network": "hardhat run scripts/check-network.ts --network marooTestnet",
     "deploy": "hardhat run scripts/deploy.ts --network marooTestnet",
     "policy:denylist": "hardhat run scripts/set-denylist.ts --network marooTestnet",
-    "pay": "hardhat run scripts/pay.ts --network marooTestnet"
+    "pay": "hardhat run scripts/pay.ts --network marooTestnet",
+    "kyc:setup": "hardhat run scripts/kyc-setup.ts --network marooTestnet",
+    "kyc:grant": "hardhat run scripts/kyc-grant.ts --network marooTestnet",
+    "kyc:revoke": "hardhat run scripts/kyc-revoke.ts --network marooTestnet",
+    "kyc:check": "hardhat run scripts/kyc-check.ts --network marooTestnet"
   },
   "devDependencies": {
     "@nomicfoundation/hardhat-ignition": "^3.1.8",

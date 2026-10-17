@@ -46,6 +46,9 @@ Measured on testnet with this template (base fee 8,000 gwei):
 | `deployPclProxy` (Transparent) | ~12.1 tOKRW |
 | `pay` through the PCL proxy | ~2.6 tOKRW |
 | `changeContractPolicies` (denylist) / `removeContractPolicies` | ~0.9 / ~0.6 tOKRW |
+| `pay` through the PCL proxy with an `EAS_POLICY` | ~3.3 tOKRW |
+| Deploy `KycResolver` / register schema / attach `EAS_POLICY` | ~8.4 / ~1.2 / ~0.9 tOKRW |
+| EAS `attest` / `Indexer.indexAttestation` / EAS `revoke` | ~2.5 / ~2.1–2.7 / ~1.3 tOKRW |
 
 Failed transactions still pay fees. A PCL policy rejection is visible to
 `eth_estimateGas` (for example `InDenylist(address)`), so the scripts simulate
@@ -56,3 +59,60 @@ every transaction first, stop there at no cost, and enforce a per-run fee cap.
 Use `@maroo-chain/contracts` 0.0.9+ and `@maroo-chain/viem` 0.4.0+. Older
 ABIs call removed methods: for example `globalOkrwEasPeriodicVolume(address)`
 now reverts with `ABISetupFailed("no method with id: 0xfcd6064b")`.
+
+## EAS
+
+| Contract | Address | On-chain `version()` |
+|---|---|---|
+| SchemaRegistry | `0x1000000000000000000000000000000000000006` | `0.0.0` (see below) |
+| EAS | `0x1000000000000000000000000000000000000007` | `1.4.0` |
+| Indexer | `0x1000000000000000000000000000000000000008` | `1.4.0` |
+
+Addresses come from the EAS precompile (`0x1000…09`) `getParams()`; scripts
+read them from there instead of hard-coding them.
+
+**These are standard EAS 1.4.0 EVM contracts.** Their runtime bytecode was
+compared byte by byte with the official build
+(`@ethereum-attestation-service/eas-contracts@1.9.0`). Sizes match exactly
+(2,741 / 18,925 / 4,340 bytes), and every differing byte is either an
+immutable value (registry and EAS addresses, version numbers, EIP-712
+name/version and cached domain) or the solc version in the metadata
+(0.8.28 on chain, 0.8.29 in the package). The logic is identical, so schema
+resolvers work as in standard EAS.
+
+Side notes from that comparison, both harmless:
+
+- SchemaRegistry's version immutables are zero, so `version()` returns
+  `0.0.0`. Registration and lookups use storage and are unaffected.
+- EAS's cached EIP-712 domain was built for chain `31337` at
+  `0x5FbDB2315678afecb367f032d93f642f64180aa3` (a local Hardhat deploy that was
+  copied into genesis). OpenZeppelin's EIP712 detects the mismatch and
+  recomputes the domain, so signatures still verify.
+
+### What `EAS_POLICY` checks, and what it does not
+
+A PCL `EAS_POLICY` (`easContract`, `indexContract`, `schemaUid`) lets a sender
+pass when the Indexer finds a valid attestation of that schema for them (per
+Maroo's identity docs and the workshop's testnet results; PCL's internal
+algorithm is not public). The
+policy errors are `EasAttestationRequired`, `EasNoAttestationReceived`,
+`EasAttestationRevoked`, `EasAttestationExpired` and
+`EasAttestationLookupFailed`.
+
+It does **not** check:
+
+- **who issued the attestation**: there is no issuer field in the policy,
+  and the Indexer returns attestations from any attester;
+- **what the attestation says**: a `false` payload passes (observed on
+  testnet by [maroo-devrel-workshop](https://github.com/nubro999/maroo-devrel-workshop/blob/main/docs/POLICY_CAVEATS.md)).
+
+Without a resolver, nothing stops anyone from self-issuing an attestation of
+the schema, and the policy has no field to tell it apart from yours. Register
+the schema with a resolver (here `KycResolver`): EAS calls it on every
+attestation and reverts the attestation when it returns false. The schema UID
+is `keccak256(schema, resolver, revocable)`, so attestations that skipped the
+resolver cannot exist under it. `npm run kyc:check` simulates a stranger's
+self-issued attestation to show the rejection on chain at no cost.
+
+Attestations must also be **indexed** (`Indexer.indexAttestation(uid)`)
+before PCL sees them; `npm run kyc:grant` does both steps.

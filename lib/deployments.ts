@@ -11,6 +11,15 @@ export type Deployment = {
   maxPaymentWei: string;
   transactions: Record<string, Hex>;
   deployedAt: string;
+  /** Set by `npm run kyc:setup`. */
+  kyc?: {
+    resolver: Address;
+    schemaUid: Hex;
+    issuer: Address;
+    eas: Address;
+    indexer: Address;
+    schemaRegistry: Address;
+  };
 };
 
 const DIR = path.resolve("deployments");

@@ -49,14 +49,38 @@ npm test            # compile + Solidity and TypeScript tests (local, free)
    npm run policy:denylist          # empty MAROO_DENY clears policies
    ```
 
+### KYC gate with EAS
+
+Make `pay()` available only to addresses holding a KYC attestation that you
+issued, the pattern a security-token (STO) app needs.
+
+```bash
+npm run kyc:setup    # deploy KycResolver, register schema, attach EAS policy to pay()
+npm run kyc:check    # read-only: KYC state, can I pay?, can a stranger self-issue KYC?
+npm run pay          # ✖ EasNoAttestationReceived(...) [PCL violation: attestation]
+npm run kyc:grant    # attest kycPassed = true (MAROO_KYC_ADDRESS, MAROO_KYC_DAYS) and index it
+npm run pay          # ✔ passes
+npm run kyc:revoke   # revoke; pay() is blocked again
+```
+
+**Why a resolver is required:** Maroo's `EAS_POLICY` passes any sender who
+holds a valid attestation of the schema. It does not check who issued it or
+what it says, so on its own anyone could self-issue "KYC". `KycResolver` is
+registered with the schema and makes EAS reject any attestation that is not
+from your issuer, has no expiration, or does not encode `kycPassed = true`.
+The schema UID includes the resolver address, so this cannot be bypassed.
+Details in [docs/CHAIN_NOTES.md](docs/CHAIN_NOTES.md#eas).
+
 ### Measured costs (Maroo testnet, October 2026)
 
 | Action | Fee |
 |---|---|
 | Deploy implementation | ~7.7 tOKRW |
 | Deploy PCL proxy | ~12.1 tOKRW |
-| `pay` through the proxy | ~2.6 tOKRW |
+| `pay` through the proxy (no policy / EAS policy) | ~2.6 / ~3.3 tOKRW |
 | Set denylist / clear policies | ~0.9 / ~0.6 tOKRW |
+| `kyc:setup` (resolver + schema + EAS policy) | ~10.6 tOKRW |
+| `kyc:grant` (attest + index) / `kyc:revoke` | ~4.7–5.3 / ~1.3 tOKRW |
 | Call rejected by a PCL policy | **0**: caught in simulation, never sent |
 
 Failed transactions still pay fees, so every script simulates first and stops
@@ -68,9 +92,11 @@ full stack trace.
 ```
 contracts/PaymentRouter.sol     example contract (proxy-ready, initializer-based)
 contracts/PaymentRouter.t.sol   Solidity tests: fuzzing, reentrancy
-test/                           TypeScript tests: proxy flow, helpers
+contracts/KycResolver.sol       EAS schema resolver: trusted issuer, kycPassed = true, expiry required
+contracts/vendor/eas/           unmodified EAS 1.4.0 sources (MIT), same code Maroo runs
+test/                           TypeScript tests: proxy flow, KYC resolver on real EAS, helpers
 lib/                            network constants, fee budget, guarded send, PCL errors, script runner
-scripts/                        check-network, deploy, pay, set-denylist
+scripts/                        check-network, deploy, pay, set-denylist, kyc-*
 docs/CHAIN_NOTES.md             verified chain facts and why the config looks like this
 ```
 
@@ -79,7 +105,8 @@ docs/CHAIN_NOTES.md             verified chain facts and why the config looks li
 | Area | Local (`npm test`) | Maroo testnet |
 |---|---|---|
 | Contract logic, proxy + initializer | ✅ | ✅ |
-| PCL policies, OKRW, EAS precompiles | ❌ chain-native, not simulated | ✅ |
+| KycResolver on real EAS 1.4.0 | ✅ | ✅ |
+| PCL policies, OKRW precompile | ❌ chain-native, not simulated | ✅ |
 
 Locally, OpenZeppelin's `TransparentUpgradeableProxy` stands in for the PCL
 proxy. It takes the same `(logic, initialOwner, initializer)` arguments.

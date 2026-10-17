@@ -5,7 +5,8 @@
 // Env (optional):
 //   MAROO_PAY_TO         recipient (default: your own address)
 //   MAROO_PAY_AMOUNT     tOKRW to forward (default 0.001)
-//   MAROO_FEE_CAP_OKRW   max total fees for this run (default 5)
+//   MAROO_FEE_CAP_OKRW   max total fees for this run (default 10; an EAS policy
+//                        on pay() raises its cost to ~5 tOKRW worst case)
 import { artifacts, network } from "hardhat";
 import { encodeFunctionData, getAddress, isAddress, parseEther } from "viem";
 
@@ -37,7 +38,7 @@ await runScript(async () => {
     {
       publicClient,
       walletClient,
-      budget: new FeeBudget(parseEther(process.env.MAROO_FEE_CAP_OKRW ?? "5")),
+      budget: new FeeBudget(parseEther(process.env.MAROO_FEE_CAP_OKRW ?? "10")),
       errorAbi: artifact.abi,
     },
     {
